@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { CovidController } from './controller/covid.controller';
 import { CovidService } from './covid.service';
 import { DashboardService } from './dashboard.service';
@@ -26,8 +28,12 @@ import { BackgroundService } from '../background/background';
     }),
     TypeOrmModule.forFeature([CovidData, CovidGlobalData]),
     ScheduleModule.forRoot(),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../', 'public', 'dist'),
+    }),
   ],
   controllers: [CovidController],
-  providers: [CovidService, DashboardService,BackgroundService],
+  // providers: [CovidService, DashboardService,BackgroundService],
+  providers: [CovidService, DashboardService],
 })
 export class AppModule {}

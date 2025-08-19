@@ -17,15 +17,15 @@ export class DashboardService {
   // Get Covid data for Indonesia from the database
   async getCovidDataIndonesiaFromDB() {
     return this.covidDataRepository.find({
-      where: { country: 'Indonesia' },
-      // order: { date: 'DESC' },  // Get the most recent entry
+      // where: { country: 'Indonesia' },
+      order: { date: 'ASC' },  // Get the most recent entry
     });
   }
 
   // Get global Covid data from the database
   async getGlobalCovidDataFromDB() {
     return this.covidGlobalDataRepository.find({
-      order: { date: 'DESC' },  // Get the most recent entry
+      order: { date: 'ASC' },  // Get the most recent entry
     });
   }
 
