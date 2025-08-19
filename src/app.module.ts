@@ -33,7 +33,6 @@ import { BackgroundService } from '../background/background';
     }),
   ],
   controllers: [CovidController],
-  // providers: [CovidService, DashboardService,BackgroundService],
-  providers: [CovidService, DashboardService],
+  providers: [CovidService, DashboardService,BackgroundService],
 })
 export class AppModule {}
