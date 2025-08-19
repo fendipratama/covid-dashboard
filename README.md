@@ -1,98 +1,86 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Covid Dashboard
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Aplikasi ini adalah sistem yang digunakan untuk menampilkan data Covid-19 secara real-time. Data yang ditampilkan diperoleh melalui API eksternal dan diproses serta disajikan melalui antarmuka pengguna berbasis web.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Tools dan Framework yang Digunakan
 
-## Description
+### Backend
+- **NestJS**: Framework Node.js untuk membangun aplikasi backend yang efisien dan scalable.
+- **TypeORM**: ORM yang digunakan untuk menghubungkan NestJS dengan MySQL, menyederhanakan interaksi dengan basis data.
+- **ScheduleModule**: Modul untuk menjadwalkan dan menjalankan tugas secara berkala, seperti pembaruan data.
+- **ServeStaticModule**: Modul untuk melayani file statis (frontend) seperti HTML, CSS, dan JS.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### Frontend
+- **Vue.js**: Framework JavaScript untuk membangun antarmuka pengguna yang responsif dan interaktif.
+- **Axios**: Digunakan untuk menarik data dari API eksternal dan berkomunikasi dengan backend.
+- **Bootstrap**: Digunakan untuk mempercantik tampilan antarmuka pengguna.
 
-## Project setup
+### Database
+- **MySQL**: Sistem manajemen basis data relasional yang digunakan untuk menyimpan data Covid-19 secara lokal.
 
-```bash
-$ npm install
-```
+---
 
-## Compile and run the project
+## Alur Proses: Dari Penarikan Data API hingga Tampilan UI
 
-```bash
-# development
-$ npm run start
+1. **Penarikan Data Menggunakan API**
+   - Backend menggunakan **Axios** untuk menarik data Covid-19 dari API eksternal seperti `https://api.covid19api.com/`.
+   - Data yang diambil mencakup statistik Covid-19 untuk Indonesia dan global, seperti jumlah kasus terkonfirmasi, sembuh, dan kematian.
 
-# watch mode
-$ npm run start:dev
+2. **Proses dan Penyimpanan Data**
+   - Setelah data diterima dari API, backend akan memproses dan menyimpannya ke dalam **database MySQL** melalui entitas `CovidData` dan `CovidGlobalData`.
+   - Data difilter dan disusun untuk mempermudah pengambilan dan analisis di frontend.
 
-# production mode
-$ npm run start:prod
-```
+3. **Pengambilan Data oleh Frontend**
+   - **Vue.js** menggunakan **Axios** untuk mengakses API backend dan menampilkan data dalam tampilan yang ramah pengguna.
+   - Data yang ditampilkan termasuk jumlah kasus Covid-19, sembuh, dan kematian dalam bentuk tabel dan grafik.
 
-## Run tests
+4. **Tampilan UI**
+   - UI dibuat menggunakan **Vue.js** dengan komponen seperti tabel, grafik, dan indikator.
+   - Antarmuka responsif yang memudahkan pengguna untuk memantau data Covid-19 secara real-time.
 
-```bash
-# unit tests
-$ npm run test
+---
 
-# e2e tests
-$ npm run test:e2e
+## Sinkronisasi Data
 
-# test coverage
-$ npm run test:cov
-```
+- **Sinkronisasi Manual dengan API Eksternal**
+   - Data diambil secara periodik menggunakan **ScheduleModule** di backend untuk memperbarui data Covid-19.
+   - Setiap pembaruan data yang diterima akan disinkronkan dengan **database MySQL**.
 
-## Deployment
+- **Penyimpanan Data**
+   - Setelah diterima, data akan disimpan dalam bentuk snapshot pada tabel yang sesuai (`CovidData` dan `CovidGlobalData`).
+   - Dengan struktur ini, data dapat dengan mudah diambil dan ditampilkan di frontend.
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+---
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## Struktur Database dan Alasan Desainnya
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+### Struktur Database
+- **Tabel `CovidData`**
+  - Menyimpan data Covid-19 untuk Indonesia, dengan kolom:
+    - `confirmed`: Jumlah kasus terkonfirmasi
+    - `recovered`: Jumlah pasien yang sembuh
+    - `deaths`: Jumlah kematian
+    - `date`: Tanggal data disimpan
+  
+- **Tabel `CovidGlobalData`**
+  - Menyimpan data Covid-19 global, dengan kolom:
+    - `confirmed`: Jumlah kasus terkonfirmasi global
+    - `recovered`: Jumlah pasien sembuh global
+    - `deaths`: Jumlah kematian global
+    - `date`: Tanggal data disimpan
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Alasan Desain
+- **Normalisasi**: Memisahkan data lokal (Indonesia) dan global memungkinkan manajemen data yang lebih mudah dan efisien.
+- **Skalabilitas**: Dengan desain ini, Anda dapat menambahkan lebih banyak negara atau wilayah di masa depan jika diperlukan.
+- **Kinerja**: Pemisahan data mempercepat query dan mengurangi overhead dalam mengambil data yang tidak relevan.
 
-## Resources
+---
 
-Check out a few resources that may come in handy when working with NestJS:
+## Masalah Teknis
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### 1. Masalah CORS
+   - Saat mengembangkan frontend dan backend secara terpisah, sering terjadi masalah **CORS** (Cross-Origin Resource Sharing) saat melakukan request dari frontend ke backend.
+   - Masalah ini dapat diatasi dengan menambahkan konfigurasi berikut di backend:
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+   ```typescript
+   app.enableCors();
