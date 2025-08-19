@@ -1,19 +1,20 @@
 # Covid Dashboard
 
-Aplikasi ini adalah sistem yang digunakan untuk menampilkan data Covid-19 secara real-time. Data yang ditampilkan diperoleh melalui API eksternal dan diproses serta disajikan melalui antarmuka pengguna berbasis web.
+Aplikasi berikut adalah sistem yang digunakan untuk menampilkan data Covid-19 secara real-time. Data yang ditampilkan diperoleh melalui API eksternal dan diproses serta disajikan melalui antarmuka pengguna berbasis web.
 
 ## Tools dan Framework yang Digunakan
 
 ### Backend
 - **NestJS**: Framework Node.js untuk membangun aplikasi backend yang efisien dan scalable.
 - **TypeORM**: ORM yang digunakan untuk menghubungkan NestJS dengan MySQL, menyederhanakan interaksi dengan basis data.
-- **ScheduleModule**: Modul untuk menjadwalkan dan menjalankan tugas secara berkala, seperti pembaruan data.
+- **ScheduleModule**: Modul untuk menjadwalkan dan menjalankan tugas secara berkala, seperti penarikan data atau proses data lainnya.
 - **ServeStaticModule**: Modul untuk melayani file statis (frontend) seperti HTML, CSS, dan JS.
 
 ### Frontend
 - **Vue.js**: Framework JavaScript untuk membangun antarmuka pengguna yang responsif dan interaktif.
 - **Axios**: Digunakan untuk menarik data dari API eksternal dan berkomunikasi dengan backend.
 - **Bootstrap**: Digunakan untuk mempercantik tampilan antarmuka pengguna.
+- *ChartJS*: Digunakan untuk membuat chart secara responsif dan interaktif.
 
 ### Database
 - **MySQL**: Sistem manajemen basis data relasional yang digunakan untuk menyimpan data Covid-19 secara lokal.
@@ -23,7 +24,7 @@ Aplikasi ini adalah sistem yang digunakan untuk menampilkan data Covid-19 secara
 ## Alur Proses: Dari Penarikan Data API hingga Tampilan UI
 
 1. **Penarikan Data Menggunakan API**
-   - Backend menggunakan **Axios** untuk menarik data Covid-19 dari API eksternal seperti `https://api.covid19api.com/`.
+   - Backend menggunakan **Axios** untuk menarik data Covid-19 dari API eksternal seperti `https://covid-api.com/api/`.
    - Data yang diambil mencakup statistik Covid-19 untuk Indonesia dan global, seperti jumlah kasus terkonfirmasi, sembuh, dan kematian.
 
 2. **Proses dan Penyimpanan Data**
@@ -31,12 +32,19 @@ Aplikasi ini adalah sistem yang digunakan untuk menampilkan data Covid-19 secara
    - Data difilter dan disusun untuk mempermudah pengambilan dan analisis di frontend.
 
 3. **Pengambilan Data oleh Frontend**
-   - **Vue.js** menggunakan **Axios** untuk mengakses API backend dan menampilkan data dalam tampilan yang ramah pengguna.
+   - **Vue.js** menggunakan **Axios** untuk mengakses API backend dan menampilkan data dalam tampilan yang ramah untuk pengguna.
    - Data yang ditampilkan termasuk jumlah kasus Covid-19, sembuh, dan kematian dalam bentuk tabel dan grafik.
 
 4. **Tampilan UI**
    - UI dibuat menggunakan **Vue.js** dengan komponen seperti tabel, grafik, dan indikator.
    - Antarmuka responsif yang memudahkan pengguna untuk memantau data Covid-19 secara real-time.
+   - Menampilkan persentase potensi kasus covid di Indonesia dan Global, dengan rumus berikut:
+     Percentage of Confirmed Cases = (Confirmed Cases / Confirmed Cases + Recovered + Deaths) x 100%
+   - Menambahkan analisa dari data yang didapat menggunakan rumus berikut:
+     a. Recovery Rate = (Recovered Cases / Confirmed Cases) x 100%
+     b. Death Rate = (Death / Confirmed Cases) x 100%
+     c. Active Cases = Confirmed Cases - (Recovered Cases + Death) 
+
 
 ---
 
@@ -57,6 +65,7 @@ Aplikasi ini adalah sistem yang digunakan untuk menampilkan data Covid-19 secara
 ### Struktur Database
 - **Tabel `CovidData`**
   - Menyimpan data Covid-19 untuk Indonesia, dengan kolom:
+    - `id`: ID auto increament
     - `confirmed`: Jumlah kasus terkonfirmasi
     - `recovered`: Jumlah pasien yang sembuh
     - `deaths`: Jumlah kematian
@@ -64,6 +73,7 @@ Aplikasi ini adalah sistem yang digunakan untuk menampilkan data Covid-19 secara
   
 - **Tabel `CovidGlobalData`**
   - Menyimpan data Covid-19 global, dengan kolom:
+    - `id`: ID auto increament
     - `confirmed`: Jumlah kasus terkonfirmasi global
     - `recovered`: Jumlah pasien sembuh global
     - `deaths`: Jumlah kematian global
@@ -78,9 +88,5 @@ Aplikasi ini adalah sistem yang digunakan untuk menampilkan data Covid-19 secara
 
 ## Masalah Teknis
 
-### 1. Masalah CORS
-   - Saat mengembangkan frontend dan backend secara terpisah, sering terjadi masalah **CORS** (Cross-Origin Resource Sharing) saat melakukan request dari frontend ke backend.
-   - Masalah ini dapat diatasi dengan menambahkan konfigurasi berikut di backend:
-
-   ```typescript
-   app.enableCors();
+### 1. Masalah API Eksternal
+   - Perlu penyesuaian untuk kebutuhan testing karna api https://covid-api.com/api/ terakhir update tanggal 2023-03-09, sehingga perlu patching di database.
